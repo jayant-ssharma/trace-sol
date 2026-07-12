@@ -1,9 +1,8 @@
-import React from 'react'
-
-const page = () => {
+const Page = ({ params }: { params: { address: string } }) => {
   return (
-    <div>page</div>
+    <div className='text-white'>
+      Wallet: {params.address}
+    </div>
   )
 }
-
-export default page
+export default Page

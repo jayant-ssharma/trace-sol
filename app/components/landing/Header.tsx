@@ -6,10 +6,10 @@ const Header = () => {
       className="flex justify-between py-5 px-3 lg:px-7" >
       <div
       className="flex gap-2">
-        <h3
+        <h4
           className="text-white lg:text-xl">
           Built on Solana
-        </h3>
+        </h4>
         
           <img 
           className='h-6 lg:h-8 w-fit'
@@ -19,10 +19,10 @@ const Header = () => {
       </div>
       <div
        className="flex gap-2">
-       <h3
+       <h4
        className="text-white lg:text-xl">
         Open Source
-       </h3>
+       </h4>
         <a href="https://github.com/jayant-ssharma">
           <FaGithub className="text-2xl lg:text-3xl text-white" />
         </a>
