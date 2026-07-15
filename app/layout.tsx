@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Libre_Baskerville, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Header from "./components/landing/Header";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -25,6 +26,7 @@ export default function RootLayout({
    return (
   <html lang="en" className={cn("font-sans", inter.variable)}>
     <body className="min-h-full flex flex-col">
+       <Header/>
       {children}
     </body>
   </html>

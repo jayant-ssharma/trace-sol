@@ -1,4 +1,3 @@
-import React from 'react'
 import TryAddressBtn from './TryAddressBtn'
 import { CiRead } from "react-icons/ci";
 

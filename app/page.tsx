@@ -6,7 +6,6 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-hidden">
       <Background />
-      <Header />
         <Main/>
     </div>
   );
