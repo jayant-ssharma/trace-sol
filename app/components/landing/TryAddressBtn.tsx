@@ -19,8 +19,7 @@ const TryAddressBtn = () => {
 
       <button
         className="hover:border-blue-200 hover:cursor-pointer active:scale-95 py-0.5 px-2 border-gray-600 border rounded-2xl"
-        onClick={() =>
-          analyse("4TYF8iW8bXET9C8aFgJoiUHhNtpBg5bqRsxSptCExvz7")
+        onClick={() => analyse("4TYF8iW8bXET9C8aFgJoiUHhNtpBg5bqRsxSptCExvz7")
         }
       >
         whale

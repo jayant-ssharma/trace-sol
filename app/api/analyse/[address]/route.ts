@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   NFTAssetsResult,
+  NFTContent,
   RawToken,
   Token,
   TokenMetadata,
   WalletData,
-  NFTContent,
+  PriceResponse,
 } from "@/app/components/types/wallet";
 
 interface RouteProps {
@@ -31,7 +32,6 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
   try {
     const apiUrl = `https://mainnet.helius-rpc.com/?api-key=${api}`;
 
-    // 1. NFTs
     const assetsResponse = await fetch(apiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -42,12 +42,13 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
         params: { ownerAddress: address, page: 1, limit: 50 },
       }),
     });
+
     if (!assetsResponse.ok) {
       return NextResponse.json({ error: "Failed to fetch from Helius" }, { status: assetsResponse.status });
     }
+
     const assetsData: { result: NFTAssetsResult } = await assetsResponse.json();
 
-    // 2. SOL balance
     const balanceResponse = await fetch(apiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -58,13 +59,14 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
         params: [address],
       }),
     });
+
     if (!balanceResponse.ok) {
       return NextResponse.json({ error: "Failed to fetch balance from Helius" }, { status: balanceResponse.status });
     }
+
     const balanceData: { result: { value: number } } = await balanceResponse.json();
     const solBalance = balanceData.result.value / 1_000_000_000;
 
-    // 3. SPL token holdings (mint + amount only)
     const tokensResponse = await fetch(apiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -79,9 +81,11 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
         ],
       }),
     });
+
     if (!tokensResponse.ok) {
       return NextResponse.json({ error: "Failed to fetch tokens from Helius" }, { status: tokensResponse.status });
     }
+
     const tokensData: { result: { value: { account: { data: { parsed: { info: TokenAccountInfo } } } }[] } } =
       await tokensResponse.json();
 
@@ -96,11 +100,10 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
       })
       .filter((token) => token.amount > 0);
 
-    // 4. Token metadata — batch lookup for all mints at once
     let tokens: Token[] = rawTokens;
+
     if (rawTokens.length > 0) {
       const mints = rawTokens.map((t) => t.mint);
-
       const metadataResponse = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -114,7 +117,6 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
 
       if (metadataResponse.ok) {
         const metadataData: { result: { id: string; content?: NFTContent }[] } = await metadataResponse.json();
-
         const metadataMap = new Map<string, TokenMetadata>(
           metadataData.result.map((asset) => [
             asset.id,
@@ -136,15 +138,29 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
         }));
       }
     }
+const SOL_MINT = "So11111111111111111111111111111111111111112"; 
+let solValue = 0;
+let solPrice: number | undefined;
+try {
+  const priceUrl = `https://api.jup.ag/price/v3?ids=${SOL_MINT}`;
+  const priceResponse = await fetch(priceUrl);
 
-    console.log({ assetsData, solBalance, tokens });
+  if (priceResponse.ok) {
+    const priceData = (await priceResponse.json()) as Partial<PriceResponse>;
+    solPrice = priceData[SOL_MINT]?.usdPrice;
+    solValue = solPrice ? solBalance * solPrice : 0;
+  }
+} catch (priceError) {
+  console.warn("Failed to fetch SOL price", priceError);
+}
 
-    const walletData: WalletData = {
-      nfts: assetsData.result,
-      solBalance,
-      tokens,
-    };
-
+const walletData: WalletData = {
+  nfts: assetsData.result,
+  solBalance,
+  tokens,
+  solValue,
+  solPrice
+};
     return NextResponse.json(walletData);
   } catch (err) {
     console.error(err);

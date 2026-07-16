@@ -65,4 +65,18 @@ export interface WalletData {
   nfts: NFTAssetsResult;
   solBalance: number;
   tokens: Token[];
+  solValue: number;
+     solPrice?: number;
 }
+
+export interface PriceEntry {
+  usdPrice: number;
+  blockId: number;
+  decimals: number;
+  priceChange24h: number;
+}
+
+export interface PriceResponse {
+  [mintAddress: string]: PriceEntry;
+}
+

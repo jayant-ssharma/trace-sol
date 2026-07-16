@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { WalletData, Token, NFTAsset } from "@/app/components/types/wallet";
+import { WalletData,} from "@/app/components/types/wallet";
 import Overview from "./analysePageComponent/Overview";
 import TokenHoldings from "./analysePageComponent/TokenHoldings";
 import NftHoldings from "./analysePageComponent/NftHoldings";
@@ -11,6 +11,7 @@ const AnalysePage = () => {
   const [data, setData] = useState<WalletData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+const [activeTab, setActiveTab] = useState<Tab>("overview");
 
   useEffect(() => {
     const getData = async () => {
@@ -49,26 +50,77 @@ const AnalysePage = () => {
       </div>
     );
   }
- console.log(data)  //umm checking
-  return (
-    <div className="text-white p-8 space-y-8">
-      
-<Overview
-    address={address}
-    solBalance={data.solBalance}
-    tokenCount={data.tokens.length}
-    nftCount={data.nfts.total}
-/>
-  <TokenHoldings
-      tokens={data.tokens}
-    />
+  
+ console.log(data.solPrice) //umm checking
 
-  <NftHoldings
-  total={data.nfts.total}
-  items={data.nfts.items}
-/>
+type Tab = "overview" | "tokens" | "nfts" | "transactions";
+
+const tabs: { id: Tab; label: string }[] = [
+  { id: "overview", label: "Overview" },
+  { id: "tokens", label: "Tokens" },
+  { id: "nfts", label: "NFTs" },
+  { id: "transactions", label: "Transactions" },
+];
+
+return (
+  <div className="text-white px-6 py-4  ">
+
+    {/* Tabs */}
+    <div className="lg:px-25 grid grid-cols-2 lg:grid-cols-4 gap-4  pb-4 lg:pb-8">
+      {tabs.map((tab) => (
+        <button
+          key={tab.id}
+          onClick={() => setActiveTab(tab.id)}
+          className={`px-3 py-1.5 rounded-2xl transition-colors ${
+            activeTab === tab.id
+              ? "bg-blue-800 text-white"
+              : "bg-gray-800 hover:bg-gray-700 hover:cursor-pointer"
+          }`}
+        >
+          {tab.label}
+        </button>
+      ))}
     </div>
-  );
+<div
+className="border-2 border-gray-600 mb-6 ">
+
+</div>
+    {/* Overview */}
+    {activeTab === "overview" && (
+      <Overview
+        address={address}
+        solBalance={data.solBalance}
+        tokenCount={data.tokens.length}
+        nftCount={data.nfts.total}
+        solValue={data.solValue}
+        solPrice={data.solPrice}
+      />
+    )}
+
+    {/* Tokens */}
+    {activeTab === "tokens" && (
+      <TokenHoldings
+        tokens={data.tokens}
+      />
+    )}
+
+    {/* NFTs */}
+    {activeTab === "nfts" && (
+      <NftHoldings
+        total={data.nfts.total}
+        items={data.nfts.items}
+      />
+    )}
+
+    {/* Transactions */}
+    {activeTab === "transactions" && (
+      <div className="text-gray-400">
+        Transactions Coming Soon...
+      </div>
+    )}
+
+  </div>
+);
 };
 
 export default AnalysePage;
