@@ -67,6 +67,7 @@ export interface WalletData {
   tokens: Token[];
   solValue: number;
      solPrice?: number;
+     recentTransactions: TransactionSignature[];
 }
 
 export interface PriceEntry {
@@ -78,5 +79,15 @@ export interface PriceEntry {
 
 export interface PriceResponse {
   [mintAddress: string]: PriceEntry;
+}
+
+export interface TransactionSignature {
+  signature: string;
+  slot: number;
+  transactionIndex: number;
+  err: unknown | null;
+  memo: string | null;
+  blockTime: number;
+  confirmationStatus: string;
 }
 

@@ -7,6 +7,7 @@ import {
   TokenMetadata,
   WalletData,
   PriceResponse,
+  TransactionSignature
 } from "@/app/components/types/wallet";
 
 interface RouteProps {
@@ -138,29 +139,57 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
         }));
       }
     }
-const SOL_MINT = "So11111111111111111111111111111111111111112"; 
-let solValue = 0;
-let solPrice: number | undefined;
-try {
-  const priceUrl = `https://api.jup.ag/price/v3?ids=${SOL_MINT}`;
-  const priceResponse = await fetch(priceUrl);
 
-  if (priceResponse.ok) {
-    const priceData = (await priceResponse.json()) as Partial<PriceResponse>;
-    solPrice = priceData[SOL_MINT]?.usdPrice;
-    solValue = solPrice ? solBalance * solPrice : 0;
-  }
-} catch (priceError) {
-  console.warn("Failed to fetch SOL price", priceError);
-}
+    const SOL_MINT = "So11111111111111111111111111111111111111112";
+    let solValue = 0;
+    let solPrice: number | undefined;
+    try {
+      const priceUrl = `https://api.jup.ag/price/v3?ids=${SOL_MINT}`;
+      const priceResponse = await fetch(priceUrl);
 
-const walletData: WalletData = {
-  nfts: assetsData.result,
-  solBalance,
-  tokens,
-  solValue,
-  solPrice
-};
+      if (priceResponse.ok) {
+        const priceData = (await priceResponse.json()) as Partial<PriceResponse>;
+        solPrice = priceData[SOL_MINT]?.usdPrice;
+        solValue = solPrice ? solBalance * solPrice : 0;
+      }
+    } catch (priceError) {
+      console.warn("Failed to fetch SOL price", priceError);
+    }
+
+    // 6. Recent transactions
+    const transactionsUrl = `https://mainnet.helius-rpc.com/?api-key=${api}`;
+    const transactionsResponse = await fetch(transactionsUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(
+        {
+          jsonrpc: "2.0",
+          id: "trace-sol-transactions",
+          method: "getTransactionsForAddress",
+          params: [
+            address,
+            {
+              transactionDetails: "signatures",
+              limit: 10,
+              sortOrder: "desc",
+            },
+          ],
+        }),
+    });
+
+    let recentTransactions: TransactionSignature[] = [];
+    if (transactionsResponse.ok) {
+      const transactionsData = await transactionsResponse.json();
+      recentTransactions = transactionsData.result?.data ?? [];
+    }
+    const walletData: WalletData = {
+      nfts: assetsData.result,
+      solBalance,
+      tokens,
+      solValue,
+      solPrice,
+      recentTransactions
+    };
     return NextResponse.json(walletData);
   } catch (err) {
     console.error(err);

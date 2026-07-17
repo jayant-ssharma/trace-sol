@@ -23,7 +23,7 @@ const Header = () => {
        className="text-white lg:text-xl">
         Open Source
        </h4>
-        <a href="https://github.com/jayant-ssharma">
+        <a href="https://github.com/jayant-ssharma/trace-sol">
           <FaGithub className="text-2xl lg:text-3xl text-white" />
         </a>
       </div>

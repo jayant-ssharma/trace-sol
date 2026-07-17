@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { WalletData,} from "@/app/components/types/wallet";
+import { WalletData,TransactionSignature} from "@/app/components/types/wallet";
 import Overview from "./analysePageComponent/Overview";
 import TokenHoldings from "./analysePageComponent/TokenHoldings";
 import NftHoldings from "./analysePageComponent/NftHoldings";
+import Transactions from "./analysePageComponent/Transactions";
 const AnalysePage = () => {
   const { address } = useParams<{ address: string }>();
   const [data, setData] = useState<WalletData | null>(null);
@@ -114,9 +115,8 @@ className="border-2 border-gray-600 mb-6 ">
 
     {/* Transactions */}
     {activeTab === "transactions" && (
-      <div className="text-gray-400">
-        Transactions Coming Soon...
-      </div>
+      <Transactions
+       transactions = {data.recentTransactions}/>
     )}
 
   </div>
