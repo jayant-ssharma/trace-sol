@@ -16,7 +16,7 @@ const NftHoldings = ({ total, items }: NftHoldingsProps) => {
         {items.map((nft) => (
           <div
             key={nft.id}
-            className="border border-gray-700 rounded-lg overflow-hidden"
+            className="border border-gray-800 hover:border-cyan-900 rounded-lg overflow-hidden"
           >
             <img
               src={

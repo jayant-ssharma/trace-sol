@@ -14,7 +14,7 @@ const Transactions = ({ transactions }: TransactionProps) => {
       {transactions.map((tx) => (
         <div
           key={tx.signature}
-          className="flex items-center justify-between border border-gray-700 rounded-lg p-3"
+          className="flex items-center justify-between border border-gray-800 hover:border-cyan-900 rounded-lg p-3"
         >
           <div>
             <p className="text-sm break-all">

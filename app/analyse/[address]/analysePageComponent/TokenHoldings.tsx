@@ -16,7 +16,7 @@ const TokenHoldings = ({ tokens }: TokenHoldingsProps) => {
           {tokens.map((token) => (
             <div
               key={token.mint}
-              className="flex items-center justify-between border border-gray-700 rounded-lg p-3"
+              className="flex items-center justify-between border border-gray-800 hover:border-cyan-900 rounded-lg p-3"
             >
               <div className="flex items-center gap-3">
                 {token.image ? (

@@ -7,6 +7,7 @@ import Overview from "./analysePageComponent/Overview";
 import TokenHoldings from "./analysePageComponent/TokenHoldings";
 import NftHoldings from "./analysePageComponent/NftHoldings";
 import Transactions from "./analysePageComponent/Transactions";
+import SearchBar from "@/app/components/landing/SearchBar";
 const AnalysePage = () => {
   const { address } = useParams<{ address: string }>();
   const [data, setData] = useState<WalletData | null>(null);
@@ -64,8 +65,11 @@ const tabs: { id: Tab; label: string }[] = [
 ];
 
 return (
-  <div className="text-white px-6 py-4  ">
+<
 
+> 
+<SearchBar/>
+  <div className="text-white px-6 py-4  ">
     {/* Tabs */}
     <div className="lg:px-25 grid grid-cols-2 lg:grid-cols-4 gap-4  pb-4 lg:pb-8">
       {tabs.map((tab) => (
@@ -122,6 +126,7 @@ className="border-2 border-gray-600 mb-6 ">
     )}
 
   </div>
+  </>
 );
 };
 
