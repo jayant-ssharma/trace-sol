@@ -95,6 +95,8 @@ className="border-2 border-gray-600 mb-6 ">
         nftCount={data.nfts.total}
         solValue={data.solValue}
         solPrice={data.solPrice}
+        recentTransactions={data.recentTransactions}
+        onViewAllTransactions={() => setActiveTab("transactions")}
       />
     )}
 

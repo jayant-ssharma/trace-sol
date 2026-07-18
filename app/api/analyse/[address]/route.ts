@@ -170,7 +170,7 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
             address,
             {
               transactionDetails: "signatures",
-              limit: 10,
+              limit:30,
               sortOrder: "desc",
             },
           ],
