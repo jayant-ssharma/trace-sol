@@ -1,3 +1,43 @@
+# 🔍 Trace-SOL — Solana Wallet Analyzer
+
+🔗 [Live Demo](https://trace-sol.vercel.app/) · [GitHub](https://github.com/jayant-ssharma/trace-sol)
+
+Paste any Solana wallet address and get a full breakdown of holdings, portfolio value, NFTs, and transaction history in one clean dashboard.
+
+---
+
+## Preview
+
+![Desktop](./public/screenshots/image.png)
+
+---
+
+## Features
+- 💰 Live SOL balance + USD value via Jupiter Price API
+- 🪙 Full SPL token holdings with name, symbol, logo and amount
+- 🖼️ NFT gallery — supports regular and compressed NFTs (cNFTs)
+- 📜 Up to 30 recent transactions with status and Explorer link
+- ⚡ Quick-fill demo buttons on landing page
+- 📱 Fully responsive, dark theme
+
+---
+
+## Tech Stack
+- Next.js (App Router) · TypeScript · React · Tailwind CSS
+- Helius RPC · Jupiter Price API v3
+- Next.js API Routes as server-side proxy — API keys never exposed to browser
+
+---
+
+## What I Learned
+- Building full-stack apps with Next.js API routes
+- Aggregating multiple parallel RPC calls into a single clean response
+- Working with real Solana on-chain data (SPL tokens, cNFTs, transactions)
+- Handling real-world edge cases like 800+ token wallets and empty accounts
+
+---
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
